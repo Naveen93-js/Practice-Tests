@@ -8,27 +8,29 @@ import Content from "./Content";
 
 function App() {
   const [selectedBtn, setSelectedBtn] = useState("title")
-  const [content, setContent] = useState()
+  const [content, setContent] = useState([])
 
   const handleChange = (e) => {
     setSelectedBtn(e.target.value)
-    console.log("hi")
   }
 
   let endPoint = selectedBtn == "title" ? "todos" : "users"
 
-  useEffect(async () => {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/${endPoint}`)
-    const data = await response.json()
-    setContent(data)
-    console.log("hello")
+  useEffect(() => {
+    async function getContent() {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/${endPoint}`)
+      const data = await response.json()
+      setContent(data)
+    }
+
+    getContent()
   }, [selectedBtn])
 
 
   return (
     <>
       <RadioButton handleChange={handleChange} selectedBtn={selectedBtn} />
-      {/* <Content /> */}
+      <Content content={content}/>
     </>
   );
 }
